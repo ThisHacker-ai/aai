@@ -1,0 +1,32 @@
+import numpy as np
+import random
+
+# Q-table (states x actions)
+Q = np.zeros((5, 3))   # 5 states, 3 actions
+
+alpha = 0.1   # learning rate
+gamma = 0.9   # discount factor
+
+print("Initial Q-table:")
+print(Q)
+
+# simple training loop
+for episode in range(10):
+    state = random.randint(0, 4)
+    action = random.randint(0, 2)
+
+    reward = random.choice([-1, 0, 1])
+    next_state = random.randint(0, 4)
+
+    # Q-learning update
+    Q[state, action] = Q[state, action] + alpha * (
+        reward + gamma * np.max(Q[next_state]) - Q[state, action]
+    )
+
+    print("Episode:", episode+1,
+          "State:", state,
+          "Action:", action,
+          "Reward:", reward)
+
+print("\nTrained Q-table:")
+print(Q)
