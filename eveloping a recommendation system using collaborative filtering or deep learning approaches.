@@ -1,0 +1,19 @@
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
+
+# user-item rating matrix
+ratings = np.array([
+    [5, 4, 0],
+    [4, 0, 3],
+    [0, 2, 5]
+])
+
+# similarity between users
+similarity = cosine_similarity(ratings)
+
+print("User similarity matrix:")
+print(similarity)
+
+# recommend items for user 0
+recommended = np.argsort(similarity[0])[::-1]
+print("Recommended users for User 0:", recommended)
