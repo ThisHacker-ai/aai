@@ -1,0 +1,22 @@
+from ultralytics import YOLO
+import cv2
+
+# load pretrained YOLO model
+model = YOLO("yolov8n.pt")
+
+# read single image
+img = cv2.imread("image.jpg")
+
+# perform detection
+results = model(img)
+
+# show detection details
+print("Detected objects:")
+for box in results[0].boxes:
+    print("Class:", int(box.cls), "Confidence:", float(box.conf))
+
+# plot result image
+output_img = results[0].plot()
+cv2.imwrite("tp.png", output_img)
+
+print("Detection result saved as output.jpg")
