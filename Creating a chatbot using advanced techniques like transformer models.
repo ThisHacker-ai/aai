@@ -1,0 +1,22 @@
+from transformers import pipeline
+
+# load transformer model
+generator = pipeline("text-generation", model="gpt2")
+
+print("Chatbot loaded using GPT-2")
+
+# generate response
+prompt = "Hello, how are you?"
+response = generator(prompt, max_length=50)
+
+print("User:", prompt)
+print("Bot Response:")
+print(response[0]["generated_text"])
+
+# another example
+prompt2 = "Artificial intelligence is"
+response2 = generator(prompt2, max_length=50)
+
+print("\nUser:", prompt2)
+print("Bot Response:")
+print(response2[0]["generated_text"])
