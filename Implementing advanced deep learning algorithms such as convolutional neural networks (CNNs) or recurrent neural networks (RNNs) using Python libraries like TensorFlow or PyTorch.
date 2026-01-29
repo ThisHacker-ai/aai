@@ -1,0 +1,33 @@
+import torch
+import torch.nn as nn
+
+# dummy sequence data
+x = torch.randn(50, 4, 1)     # 50 samples, seq length 4
+y = torch.randint(0, 2, (50,))
+
+# model
+lstm = nn.LSTM(1, 10, batch_first=True)
+fc = nn.Linear(10, 2)
+
+loss_fn = nn.CrossEntropyLoss()
+optimizer = torch.optim.Adam(list(lstm.parameters()) + list(fc.parameters()), lr=0.01)
+
+# training
+for i in range(5):
+    out, _ = lstm(x)
+    out = out[:, -1, :]
+    out = fc(out)
+
+    loss = loss_fn(out, y)
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
+
+    print("Epoch", i+1, "Loss", loss.item())
+
+# testing
+test = torch.randn(1, 4, 1)
+out, _ = lstm(test)
+out = fc(out[:, -1, :])
+
+print("Predicted class:", torch.argmax(out).item())
