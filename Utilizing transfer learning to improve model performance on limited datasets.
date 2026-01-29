@@ -1,0 +1,34 @@
+import torch
+import torch.nn as nn
+from torchvision import models
+
+# load pretrained model
+model = models.resnet18(pretrained=True)
+
+# freeze pretrained layers
+for param in model.parameters():
+    param.requires_grad = False
+
+# replace final layer
+model.fc = nn.Linear(model.fc.in_features, 2)
+
+print("Modified ResNet model:")
+print(model.fc)
+
+# dummy image batch (limited data simulation)
+x = torch.randn(4, 3, 224, 224)
+y = torch.tensor([0, 1, 0, 1])
+
+# loss and optimizer (only last layer trained)
+criterion = nn.CrossEntropyLoss()
+optimizer = torch.optim.Adam(model.fc.parameters(), lr=0.001)
+
+# one training step
+output = model(x)
+loss = criterion(output, y)
+
+optimizer.zero_grad()
+loss.backward()
+optimizer.step()
+
+print("Loss after one training step:", loss.item())
