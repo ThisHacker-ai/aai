@@ -1,0 +1,31 @@
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import GridSearchCV, train_test_split
+from sklearn.svm import SVC
+
+# load data
+X, y = load_breast_cancer(return_X_y=True)
+
+# split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)
+
+# model
+model = SVC()
+
+# hyperparameters
+param_grid = {
+    "C": [0.1, 1, 10],
+    "kernel": ["linear", "rbf"]
+}
+
+# grid search
+grid = GridSearchCV(model, param_grid, cv=3)
+grid.fit(X_train, y_train)
+
+print("Best parameters:", grid.best_params_)
+print("Best CV score:", grid.best_score_)
+
+# evaluate best model
+test_score = grid.best_estimator_.score(X_test, y_test)
+print("Test accuracy:", test_score)
