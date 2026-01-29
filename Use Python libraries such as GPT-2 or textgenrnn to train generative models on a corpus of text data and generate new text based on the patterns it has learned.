@@ -1,0 +1,28 @@
+from transformers import GPT2Tokenizer, GPT2LMHeadModel
+import torch
+
+# load tokenizer and model
+tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
+model = GPT2LMHeadModel.from_pretrained("gpt2")
+
+print("GPT-2 model loaded")
+
+# input text
+prompt = "Artificial intelligence will change the world"
+
+# encode input
+inputs = tokenizer.encode(prompt, return_tensors="pt")
+
+# generate text
+outputs = model.generate(
+    inputs,
+    max_length=50,
+    num_return_sequences=2,
+    do_sample=True
+)
+
+# decode output
+for i, output in enumerate(outputs):
+    text = tokenizer.decode(output, skip_special_tokens=True)
+    print("\nGenerated Text", i+1)
+    print(text)
